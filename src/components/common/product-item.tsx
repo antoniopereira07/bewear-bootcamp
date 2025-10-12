@@ -3,16 +3,16 @@ import Link from "next/link";
 
 import { productTable, productVariantTable } from "@/db/schema";
 import { formatCentsToBRL } from "@/helpers/money";
-
+import { cn } from "@/lib/utils";
 interface ProductItemProps {
   product: typeof productTable.$inferSelect & {
     variants: (typeof productVariantTable.$inferSelect)[];
   };
+  textContainerClassName?: string;
 }
 
-const ProductItem = ({ product }: ProductItemProps) => {
+const ProductItem = ({ product, textContainerClassName }: ProductItemProps) => {
   const firstVariant = product.variants[0];
-  console.log({ firstVariant });
   return (
     <Link href="/" className="flex flex-col gap-4">
       <Image
