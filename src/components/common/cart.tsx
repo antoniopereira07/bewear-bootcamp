@@ -78,7 +78,7 @@ export const Cart = () => {
               </div>
 
               <Button className="mt-5 rounded-full" asChild>
-                <Link href="/cart/identication">Finalizar compra</Link>
+                <Link href="/cart/identification">Finalizar compra</Link>
               </Button>
             </div>
           )}
