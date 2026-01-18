@@ -1,11 +1,12 @@
 import { desc } from "drizzle-orm";
-import Image from "next/image";
 
 import BrandCarousel from "@/components/common/brand-carousel";
 import CategorySelector from "@/components/common/category-selector";
 import Footer from "@/components/common/footer";
 import { Header } from "@/components/common/header";
+import HeroBanner from "@/components/common/hero-banner";
 import ProductList from "@/components/common/product-list";
+import PromoGrid from "@/components/common/promo-grid";
 import { db } from "@/db";
 import { productTable } from "@/db/schema";
 
@@ -26,39 +27,30 @@ const Home = async () => {
   return (
     <>
       <Header />
-      <div className="space-y-6">
-        <div className="px-5">
-          <Image
-            src="/banner-01.png"
-            alt="leve uma vida com estilo"
-            height={0}
-            width={0}
-            sizes="100vw"
-            className="h-auto w-full"
-          />
-        </div>
+      <main className="mx-auto max-w-6xl space-y-8 px-0 pb-10 md:px-4">
+        <HeroBanner/>
 
         <BrandCarousel />
 
-        <ProductList products={products} title="Mais vendidos" />
+        <ProductList 
+          products={products} 
+          title="Mais vendidos" 
+          seeAllHref="/products?sort=best" 
+        />
 
-        <div className="px-5">
+        <section className="px-5">
           <CategorySelector categories={categories} />
-        </div>
-
-        <div className="px-5">
-          <Image
-            src="/banner-02.png"
-            alt="Leve uma vida com estilo"
-            height={0}
-            width={0}
-            sizes="100vw"
-            className="h-auto w-full"
+        </section>
+        
+          <ProductList 
+            products={newlyCreatedProducts} 
+            title="Novos produtos"
+            seeAllHref="/products?sort=new"
           />
-        </div>
-        <ProductList products={newlyCreatedProducts} title="Novos produtos" />
-        <Footer />
-      </div>
+
+        <PromoGrid />
+      </main>
+      <Footer />
     </>
   );
 };
