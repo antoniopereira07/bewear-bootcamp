@@ -6,10 +6,13 @@ import {
   LogOutIcon,
   MenuIcon,
   Package,
+  Search,
   User2,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
 
 import { authClient } from "@/lib/auth-client";
 
@@ -32,6 +35,7 @@ import {
   SheetTrigger,
 } from "../ui/sheet";
 import { Cart } from "./cart";
+import SearchCommand from "./search-command";
 
 const NAV = [
   { href: "/category/camisetas", label: "Camisetas" },
@@ -44,6 +48,19 @@ const NAV = [
 
 export const Header = () => {
   const { data: session } = authClient.useSession();
+  const [openSearch, setOpenSearch] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const goToSearch = (term: string) => {
+    const q = term.trim();
+    if (!q) return;
+    setOpenSearch(false);
+    router.push(`/busca/${encodeURIComponent(q)}`);
+  };
+
+  // helper para saber se a rota atual pertence ao link (ex.: /category/calcas/...)
+  const isActive = (href: string) => pathname?.startsWith(href);
 
   return (
     <header className="sticky top-0 z-40 w-full bg-white/80 backdrop-blur-md">
@@ -125,13 +142,17 @@ export const Header = () => {
                   <nav className="space-y-1">
                     <Link
                       href="/"
-                      className="flex items-center gap-3 rounded-xl p-3 hover:bg-slate-50"
+                      className={`flex items-center gap-3 rounded-xl p-3 hover:bg-slate-50 ${
+                        isActive("/") && pathname === "/" ? "text-primary" : ""
+                      }`}
                     >
                       <Home className="h-4 w-4" /> Início
                     </Link>
                     <Link
                       href="/my-orders"
-                      className="flex items-center gap-3 rounded-xl p-3 hover:bg-slate-50"
+                      className={`flex items-center gap-3 rounded-xl p-3 hover:bg-slate-50 ${
+                        isActive("/my-orders") ? "text-primary" : ""
+                      }`}
                     >
                       <Package className="h-4 w-4" /> Meus Pedidos
                     </Link>
@@ -141,7 +162,9 @@ export const Header = () => {
                       <Link
                         key={item.href}
                         href={item.href}
-                        className="block rounded-xl p-3 hover:bg-slate-50" 
+                        className={`block rounded-xl p-3 hover:bg-slate-50 ${
+                          isActive(item.href) ? "text-primary" : ""
+                        }`}
                       >
                         {item.label}
                       </Link>
@@ -227,9 +250,11 @@ export const Header = () => {
             <Button
               variant="ghost"
               size="icon"
-              className="hidden rounded-2xl md:inline-flex"
+              className="rounded-2xl"
+              aria-label="Buscar"
+              onClick={() => setOpenSearch(true)}
             >
-              <User2 className="h-5 w-5" />
+              <Search className="h-5 w-5" />
             </Button>
 
             <Cart />
@@ -238,18 +263,38 @@ export const Header = () => {
 
         {/* nav desktop */}
         <nav className="hidden items-center justify-center gap-6 pb-3 text-sm text-slate-700 md:flex">
-          {NAV.map((item) => (
+          {NAV.map((item) => {
+            const active = isActive(item.href);
+            return (
               <Link
                 key={item.href}
                 href={item.href}
-                className="rounded-full px-2 py-1 hover:text-black"
+                className={`rounded-full px-2 py-1 hover:text-black ${
+                  active ? "text-primary" : ""
+                }`}
               >
-               {item.label}
+                <span
+                  className={`inline-block pb-1 ${
+                    active
+                      ? "border-primary border-b-2"
+                      : "border-b-2 border-transparent"
+                  }`}
+                >
+                  {item.label}
+                </span>
               </Link>
-          ))}
+            );
+          })}
         </nav>
       </div>
       <Separator />
+
+      {/* Dialog de Busca */}
+      <SearchCommand
+        open={openSearch}
+        onOpenChange={setOpenSearch}
+        onSubmit={goToSearch}
+      />
     </header>
   );
 };
