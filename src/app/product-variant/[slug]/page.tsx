@@ -18,12 +18,14 @@ interface ProductVariantPageProps {
 
 const ProductVariantPage = async ({ params }: ProductVariantPageProps) => {
   const { slug } = await params;
+
   const productVariant = await db.query.productVariantTable.findFirst({
     where: eq(productVariantTable.slug, slug),
     with: {
       product: {
         with: {
           variants: true,
+          category: true,
         },
       },
     },
@@ -36,52 +38,86 @@ const ProductVariantPage = async ({ params }: ProductVariantPageProps) => {
     with: {
       variants: true,
     },
+    limit: 8,
   });
+
   return (
     <>
       <Header />
-      <div className="flex flex-col space-y-6">
-        <Image
-          src={productVariant.imageUrl}
-          alt={productVariant.name}
-          sizes="100vw"
-          height={0}
-          width={0}
-          className="h-auto w-full object-cover"
-        />
+       {/* GRID DESKTOP conforme o mock */}
+       <main className="mx-auto max-w-6xl px-5 py-6 md:px-4">
+        <section className="md:grid md:grid-cols-12 md:gap-8">
+          {/* Galeria (imagem grande) */}
+          <div className="md:col-span-7">
+            <div className="relative aspect-[4/5] w-full overflow-hidden rounded-3xl bg-slate-50">
+              <Image
+                src={productVariant.imageUrl}
+                alt={productVariant.name}
+                fill
+                sizes="(max-width:768px) 100vw, 640px"
+                className="object-cover"
+                priority
+              />
+            </div>
 
-        <div className="px-5">
-          <VariantSelector
-            selectedVariantSlug={productVariant.slug}
-            variants={productVariant.product.variants}
-          />
-        </div>
+            {/* MOBILE: Selector abaixo da imagem */}
+            <div className="mt-4 md:hidden">
+              <VariantSelector
+                selectedVariantSlug={productVariant.slug}
+                variants={productVariant.product.variants}
+              />
+            </div>
+          </div>
 
-        <div className="px-5">
-          {/* DESCRIÇÃO */}
-          <h2 className="text-lg font-semibold">
-            {productVariant.product.name}
-          </h2>
-          <h3 className="text-muted-foreground text-sm">
-            {productVariant.name}
-          </h3>
-          <h3 className="text-lg font-semibold">
-            {formatCentsToBRL(productVariant.priceInCents)}
-          </h3>
-        </div>
+          {/* Painel direito: título, preço, selector (somente desktop), quantidade e ações */}
+          <div className="mt-6 md:col-span-5 md:mt-0">
+            <h1 className="text-xl font-semibold md:text-2xl">
+              {productVariant.product.name}
+            </h1>
+            <p className="text-xs text-slate-500 md:text-sm">
+              {productVariant.name}
+            </p>
 
-        <ProductActions productVariantId={productVariant.id} />
+            <div className="mt-3 text-lg font-bold md:text-xl">
+              {formatCentsToBRL(productVariant.priceInCents)}
+            </div>
 
-        <div className="px-5">
-          <p className="text-shadow-amber-600">
-            {productVariant.product.description}
-          </p>
-        </div>
+            {/* DESKTOP: Selector depois do preço */}
+            <div className="mt-4 hidden md:block">
+              <VariantSelector
+                selectedVariantSlug={productVariant.slug}
+                variants={productVariant.product.variants}
+              />
+            </div>
 
-        <ProductList title="Talvez você goste" products={likelyProducts} />
+            <div className="mt-6 space-y-6">
+              <ProductActions productVariantId={productVariant.id} />
 
-        <Footer />
-      </div>
+              <div>
+                <p className="text-xs leading-relaxed text-slate-600 md:text-sm">
+                  {productVariant.product.description}
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Você também pode gostar */}
+        <section className="mt-10">
+          <div className="mb-3 flex items-center justify-between">
+            <h3 className="font-semibold">Você também pode gostar</h3>
+            <a
+              href="/products"
+              className="text-sm text-slate-600 hover:text-slate-900"
+            >
+              Ver todos
+            </a>
+          </div>
+          <ProductList title="" products={likelyProducts} />
+        </section>
+      </main>
+
+      <Footer />
     </>
   );
 };
