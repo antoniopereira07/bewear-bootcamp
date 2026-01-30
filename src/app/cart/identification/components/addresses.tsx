@@ -114,7 +114,7 @@ const Addresses = ({
   };
 
   return (
-    <Card>
+    <Card className="rounded-2xl border-slate-200">
       <CardHeader>
         <CardTitle>Identificação</CardTitle>
       </CardHeader>
@@ -125,37 +125,35 @@ const Addresses = ({
           </div>
         ) : (
           <RadioGroup
-            value={selectedAddress}
+            value={selectedAddress ?? ""}
             onValueChange={setSelectedAddress}
           >
             {addresses?.length === 0 && (
               <div className="py-4 text-center">
-                <p className="text-muted-foreground">
+                <p className="text-slate-500">
                   Você ainda não possui endereços cadastrados.
                 </p>
               </div>
             )}
 
             {addresses?.map((address) => (
-              <Card key={address.id}>
-                <CardContent>
-                  <div className="flex items-start space-x-2">
+              <Card key={address.id} className="mb-3">
+                <CardContent className="py-4">
+                  <div className="flex items-start gap-3">
                     <RadioGroupItem value={address.id} id={address.id} />
-                    <div className="flex-1">
-                      <Label htmlFor={address.id} className="cursor-pointer">
-                        <div>
-                          <p className="text-sm">{formatAddress(address)}</p>
-                        </div>
-                      </Label>
-                    </div>
+                    <Label htmlFor={address.id} className="cursor-pointer">
+                      <p className="text-sm whitespace-pre-line">
+                        {formatAddress(address)}
+                      </p>
+                    </Label>
                   </div>
                 </CardContent>
               </Card>
             ))}
 
             <Card>
-              <CardContent>
-                <div className="flex items-center space-x-2">
+              <CardContent className="py-4">
+                <div className="flex items-center gap-3">
                   <RadioGroupItem value="add_new" id="add_new" />
                   <Label htmlFor="add_new">Adicionar novo endereço</Label>
                 </div>
@@ -168,7 +166,7 @@ const Addresses = ({
           <div className="mt-4">
             <Button
               onClick={handleGoToPayment}
-              className="w-full"
+              className="w-full rounded-full"
               disabled={updateCartShippingAddressMutation.isPending}
             >
               {updateCartShippingAddressMutation.isPending
@@ -363,7 +361,7 @@ const Addresses = ({
 
               <Button
                 type="submit"
-                className="w-full"
+                className="w-full rounded-full"
                 disabled={
                   createShippingAddressMutation.isPending ||
                   updateCartShippingAddressMutation.isPending

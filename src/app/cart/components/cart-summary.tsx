@@ -18,22 +18,37 @@ interface CartSummaryProps {
   }>;
 }
 
+/** Sidebar responsiva do carrinho/checkout */
 const CartSummary = ({
   subtotalInCents,
   totalInCents,
   products,
 }: CartSummaryProps) => {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Resumo</CardTitle>
+    <Card className="rounded-2xl border-slate-200 shadow-sm">
+      <CardHeader className="pb-3">
+        <CardTitle className="text-base md:text-lg">Resumo</CardTitle>
       </CardHeader>
+
       <CardContent className="space-y-3">
-        <div className="flex justify-between">
-          <p className="text-sm">Subtotal</p>
-          <p className="text-muted-foreground text-sm font-medium">
-            {formatCentsToBRL(subtotalInCents)}
-          </p>
+        {/* Totais */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <p className="text-sm">Subtotal</p>
+            <p className="text-sm font-medium text-slate-600">
+              {formatCentsToBRL(subtotalInCents)}
+            </p>
+          </div>
+          <div className="flex items-center justify-between">
+            <p className="text-sm">Frete</p>
+            <p className="text-sm font-medium text-slate-600">GRÁTIS</p>
+          </div>
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-semibold">Total</p>
+            <p className="text-base font-extrabold">
+              {formatCentsToBRL(totalInCents)}
+            </p>
+          </div>
         </div>
         <div className="flex justify-between">
           <p className="text-sm">Frete</p>
@@ -50,30 +65,42 @@ const CartSummary = ({
           <Separator />
         </div>
 
-        {products.map((product) => (
-          <div className="flex items-center justify-between" key={product.id}>
-            <div className="flex items-center gap-4">
-              <Image
-                src={product.imageUrl}
-                alt={product.name}
-                width={78}
-                height={78}
-                className="rounded-lg"
-              />
-              <div className="flex flex-col gap-1">
-                <p className="text-sm font-semibold">{product.name}</p>
-                <p className="text-muted-foreground text-xs font-medium">
-                  {product.variantName}
-                </p>
+        {/* Produtos (lista) */}
+        <div className="space-y-3">
+          {products.map((product) => (
+            <div 
+              className="flex items-center justify-between gap-3"
+              key={product.id}
+            >
+              <div className="flex min-w-0 items-center gap-3">
+                <div className="relative h-14 w-14 overflow-hidden rounded-lg md:h-16 md:w-16">
+                  <Image
+                    src={product.imageUrl}
+                    alt={product.name}
+                    fill
+                    sizes="64px"
+                    className="object-cover"
+                  />
+                </div>
+
+              <div className="min-w-0">
+                  <p className="truncate text-sm font-semibold">
+                    {product.name}
+                  </p>
+                  <p className="truncate text-xs font-medium text-slate-500">
+                    {product.variantName} • Qtd: {product.quantity}
+                  </p>
               </div>
             </div>
-            <div className="flex flex-col items-end justify-center gap-2">
+
+            <div className="text-right">
               <p className="text-sm font-bold">
                 {formatCentsToBRL(product.priceInCents)}
-              </p>
+                </p>
             </div>
           </div>
-        ))}
+          ))}
+        </div>
       </CardContent>
     </Card>
   );
