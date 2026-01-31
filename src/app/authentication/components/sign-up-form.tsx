@@ -28,17 +28,17 @@ import { authClient } from "@/lib/auth-client";
 
 const formSchema = z
   .object({
-    name: z.string("Nome inválido.").trim().min(1, "Nome é obrigatório."),
-    email: z.email("E-mail inválido."),
-    password: z.string("Senha inválida.").min(8, "Senha inválida."),
-    passwordConfirmation: z.string("Senha inválida.").min(8, "Senha inválida."),
+    name: z.string("Nome inválido.").trim().min(1, "Nome é obrigatório"),
+    email: z.email("E-mail inválido.").nonempty("Email é obrigatório"),
+    password: z.string().min(8, "Senha deve ter pelo menos 8 caracteres"),
+    passwordConfirmation: z.string().min(8, "Confirmação de senha é obrigatória"),
   })
   .refine(
     (data) => {
       return data.password === data.passwordConfirmation;
     },
     {
-      error: "As senhas não coincidem.",
+      error: "As senhas não coincidem",
       path: ["passwordConfirmation"],
     },
   );
@@ -78,42 +78,54 @@ const SignUpForm = () => {
   }
 
   return (
-    <>
-      <Card className="w-full">
-        <CardHeader>
-          <CardTitle>Criar conta</CardTitle>
-          <CardDescription>Crie uma conta para continuar.</CardDescription>
-        </CardHeader>
+    <Card className="w-full rounded-2xl border-slate-200 shadow-sm">
+      <CardHeader>
+        <CardTitle>Criar Conta</CardTitle>
+        <CardDescription>
+          Crie uma conta para começar a usar nossos serviços.
+        </CardDescription>
+      </CardHeader>
 
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <CardContent className="grid w-full gap-6">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Nome</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Digite seu nome" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Digite seu email" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <CardContent className="grid gap-6">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Nome</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Digite seu nome"
+                      type="text"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="email@example.com"
+                      type="email"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className="grid gap-6 md:grid-cols-2">
               <FormField
                 control={form.control}
                 name="password"
@@ -131,15 +143,16 @@ const SignUpForm = () => {
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
                 name="passwordConfirmation"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Confirmar senha</FormLabel>
+                    <FormLabel>Confirmação de Senha</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Digite a sua senha novamente"
+                        placeholder="Digite novamente sua senha"
                         type="password"
                         {...field}
                       />
@@ -148,14 +161,17 @@ const SignUpForm = () => {
                   </FormItem>
                 )}
               />
-            </CardContent>
-            <CardFooter>
-              <Button type="submit">Criar conta</Button>
-            </CardFooter>
-          </form>
-        </Form>
-      </Card>
-    </>
+            </div>
+          </CardContent>
+
+          <CardFooter>
+            <Button type="submit" className="w-full rounded-full">
+              Criar conta
+            </Button>
+          </CardFooter>
+        </form>
+      </Form>
+    </Card>
   );
 };
 
