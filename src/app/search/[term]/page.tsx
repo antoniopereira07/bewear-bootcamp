@@ -1,3 +1,4 @@
+// src/app/search/[term]/page.tsx
 import { sql } from "drizzle-orm";
 import { notFound } from "next/navigation";
 
@@ -10,9 +11,10 @@ import { productTable } from "@/db/schema";
 export default async function SearchPage({
   params,
 }: {
-  params: { term: string };
+  params: Promise<{ term: string }>;
 }) {
-  const term = decodeURIComponent(params.term ?? "").trim();
+  const { term: raw } = await params;
+  const term = decodeURIComponent(raw ?? "").trim();
   if (!term) notFound();
 
   const pattern = `%${term}%`;
