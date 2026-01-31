@@ -6,7 +6,7 @@ import {
   LogOutIcon,
   MenuIcon,
   Package,
-  // Search,
+  Search,
   User2,
 } from "lucide-react";
 import Image from "next/image";
@@ -247,7 +247,7 @@ export const Header = () => {
           {/* direita: ações */}
           <div className="flex items-center justify-end gap-2">
             {/* Lupa abre a busca (mobile + desktop) */}
-            {/* <Button
+            <Button
               variant="ghost"
               size="icon"
               className="rounded-2xl"
@@ -255,7 +255,7 @@ export const Header = () => {
               onClick={() => setOpenSearch(true)}
             >
               <Search className="h-5 w-5" />
-            </Button> */}
+            </Button>
 
             <Cart />
           </div>
