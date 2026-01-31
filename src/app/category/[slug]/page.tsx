@@ -1,3 +1,4 @@
+// src/category/[slug]/page.tsx
 import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 
