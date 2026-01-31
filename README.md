@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🛒 BEWEAR Bootcamp
 
-## Getting Started
+> A full-stack e-commerce application built during the BEWEAR Bootcamp — leveraging **Next.js**, **Drizzle ORM**, **shadcn/ui**, **Tailwind CSS**, and **React Query**. This project delivers a modern, responsive shopping experience, complete with product browsing, category filtering, cart management, checkout flow, and order tracking.
 
-First, run the development server:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## ✨ Features
+
+- **Home Page (Mobile-first + Desktop Ready):**
+  - Hero banner with responsive design
+  - Featured sections: *Best Sellers* & *New Products* with horizontal scrolling
+  - Brand showcase and category highlights
+
+- **Catalog & Search:**
+  - Category-based navigation
+  - Dynamic search with live results
+
+- **Product Page:**
+  - Variant selection
+  - Add-to-cart & Buy-now actions
+
+- **Cart & Checkout:**
+  - Responsive cart summary
+  - Address/Identification step (select or add new)
+  - Purchase confirmation page
+  - Visual step indicator for checkout flow
+
+- **Authentication:**
+  - Sign in / Sign up with form validation
+  - Google social login
+  - Fully responsive design
+
+- **User Orders:**
+  - "My Orders" dashboard with order history
+  - Expandable accordion for detailed view
+  - Status badges for quick updates
+
+---
+
+## 🛠 Tech Stack
+
+| Layer         | Technologies                              |
+|---------------|-------------------------------------------|
+| Frontend      | Next.js (App Router), React               |
+| UI/CSS        | Tailwind CSS, shadcn/ui                   |
+| State         | React Query, Custom Hooks                 |
+| Backend/DB    | Drizzle ORM (PostgreSQL or compatible DB) |
+| Auth          | Custom `authClient` with Google Sign-in   |
+
+---
+
+## 📂 Project Structure
+
+```
+src/
+├── app/
+│   ├── cart/               # Checkout-related pages
+│   ├── authentication/     # Login & signup
+│   ├── busca/              # Search results
+│   └── category/           # Category listings
+├── components/
+│   ├── common/              # Shared UI components
+│   ├── ui/                  # UI primitives
+│   └── cart/                # Cart components
+├── db/                      # Drizzle schema & queries
+└── helpers/                 # Utility functions
+    ├── money.ts
+    └── address.ts
+public/                      # Assets, banners, svgs
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🎨 UI & UX Highlights
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Mobile-first layout with responsive grid  
+- Step indicator for checkout progress  
+- Order status badges for instant recognition  
+- Smooth accordion animations for order details  
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
