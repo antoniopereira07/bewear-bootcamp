@@ -2,6 +2,7 @@ import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
+import CheckoutSteps from "@/components/common/checkout-steps";
 import Footer from "@/components/common/footer";
 import { Header } from "@/components/common/header";
 import { db } from "@/db";
@@ -48,6 +49,9 @@ const IdentificationPage = async () => {
   return (
     <>
       <Header />
+      {/* Stepper de checkout */}
+      <CheckoutSteps current="identification" />
+
       <main className="mx-auto max-w-6xl px-5 py-6 md:px-4">
         <div className="grid gap-6 md:grid-cols-12">
           {/* Coluna principal */}

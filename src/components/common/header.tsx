@@ -6,7 +6,7 @@ import {
   LogOutIcon,
   MenuIcon,
   Package,
-  Search,
+  // Search,
   User2,
 } from "lucide-react";
 import Image from "next/image";

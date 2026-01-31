@@ -1,13 +1,14 @@
-import { eq } from "drizzle-orm";
+// import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
+import CheckoutSteps from "@/components/common/checkout-steps"
 import Footer from "@/components/common/footer";
 import { Header } from "@/components/common/header";
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { db } from "@/db";
-import { shippingAddressTable } from "@/db/schema";
+// import { shippingAddressTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 
 import CartSummary from "../components/cart-summary";
@@ -50,6 +51,10 @@ const ConfirmationPage = async () => {
   return (
     <>
       <Header />
+
+      {/* Stepper de checkout */}
+      <CheckoutSteps current="payment" />
+
       <main className="mx-auto max-w-6xl px-5 py-6 md:px-4">
         <div className="grid gap-6 md:grid-cols-12">
           {/* Coluna principal */}
