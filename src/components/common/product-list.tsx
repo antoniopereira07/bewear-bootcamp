@@ -1,6 +1,7 @@
 "use client";
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import Link from "next/link";
 import {useRef} from "react";
 
 import { productTable, productVariantTable } from "@/db/schema";
@@ -41,7 +42,7 @@ const ProductList = ({
             asChild
             className="rounded-full px-3"
           >
-            <a href={seeAllHref}>Ver todos</a>
+            <Link href={seeAllHref}>Ver todos</Link>
           </Button>
           <div className="flex gap-1">
             <Button
@@ -49,6 +50,7 @@ const ProductList = ({
               size="icon"
               className="rounded-full"
               onClick={() => scrollBy(-320)}
+              aria-label="Scroll para a esquerda"
             >
               <ChevronLeft className="h-4 w-4" />
             </Button>
@@ -57,6 +59,7 @@ const ProductList = ({
               size="icon"
               className="rounded-full"
               onClick={() => scrollBy(320)}
+              aria-label="Scroll para a direita"
             >
               <ChevronRight className="h-4 w-4" />
             </Button>

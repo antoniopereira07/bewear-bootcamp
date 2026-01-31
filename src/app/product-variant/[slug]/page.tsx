@@ -103,18 +103,11 @@ const ProductVariantPage = async ({ params }: ProductVariantPageProps) => {
         </section>
 
         {/* Você também pode gostar */}
-        <section className="mt-10">
-          <div className="mb-3 flex items-center justify-between">
-            <h3 className="font-semibold">Você também pode gostar</h3>
-            <a
-              href="/products"
-              className="text-sm text-slate-600 hover:text-slate-900"
-            >
-              Ver todos
-            </a>
-          </div>
-          <ProductList title="" products={likelyProducts} />
-        </section>
+        <ProductList
+          title="Produtos que vai gostar"
+          products={likelyProducts}
+          seeAllHref={`/products?category=${productVariant.product.categoryId}&excludeProductId=${productVariant.product.id}`}
+        />
       </main>
 
       <Footer />

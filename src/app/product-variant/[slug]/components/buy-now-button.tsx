@@ -3,11 +3,17 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 import { addProductToCart } from "@/actions/add-cart-product";
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
 
+/**
+ * Buy Now:
+ * - Se não autenticado: redireciona para /authentication
+ * - Se autenticado: adiciona ao carrinho e segue para identificação (/cart/identification)
+ */
 interface BuyNowButtonProps {
   productVariantId: string;
   quantity: number;
@@ -15,8 +21,8 @@ interface BuyNowButtonProps {
 
 const BuyNowButton = ({ productVariantId, quantity }: BuyNowButtonProps) => {
   const router = useRouter();
-  const queryClient = useQueryClient();
   const { data: session } = authClient.useSession();
+  const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({
     mutationKey: ["buyNow", productVariantId, quantity],
@@ -27,15 +33,17 @@ const BuyNowButton = ({ productVariantId, quantity }: BuyNowButtonProps) => {
       }),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["cart"] });
-      // vai direto para etapa de identificação/endereço
       router.push("/cart/identification");
     },
+    onError: () => {
+      toast.error("Não foi possível continuar. Tente novamente.")
+    }
   });
 
   const handleClick = () => {
     if (!session?.user?.id) {
-      const back = typeof window !== "undefined" ? window.location.pathname : "/";
-      router.push(`/authentication?redirect=${encodeURIComponent(back)}`);
+      toast.info("Faça login para finalizar sua compra.");
+      router.push("/authentication");
       return;
     }
     mutate();
@@ -45,7 +53,7 @@ const BuyNowButton = ({ productVariantId, quantity }: BuyNowButtonProps) => {
     <Button
       className="rounded-full"
       size="lg"
-      variant="outline"
+      variant="default"
       disabled={isPending}
       onClick={handleClick}
     >
