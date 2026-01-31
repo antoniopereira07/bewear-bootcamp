@@ -35,7 +35,8 @@ const MyOrdersPage = async () => {
     <div className="flex min-h-screen flex-col bg-slate-50">
       <Header />
 
-      <main className="mx-auto w-full max-w-md flex-1 px-4 py-4">
+      {/* Desktop container mais largo */}
+      <main className="mx-auto w-full max-w-md flex-1 px-4 py-4 md:px-5">
         <Orders
           orders={orders.map((order) => ({
             createdAt: order.createdAt,

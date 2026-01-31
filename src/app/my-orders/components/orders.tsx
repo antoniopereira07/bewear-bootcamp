@@ -50,24 +50,24 @@ function ItemRow({ item }: { item: OrderItem }) {
   const price = currency.format(item.priceInCents / 100);
   return (
     <div className="flex items-start gap-4">
-      <div className="relative h-16 w-16 overflow-hidden rounded-xl border bg-white">
+      <div className="relative h-16 w-16 overflow-hidden rounded-xl border bg-white md:h-20 md:w-20">
         <Image
           src={item.imageUrl}
           alt={item.productName}
           fill
-          sizes="64px"
+          sizes="(max-width:768px) 64px, 80px"
           className="object-cover"
         />
       </div>
       <div className="grid flex-1">
-        <span className="text-sm font-semibold text-slate-900">
+        <span className="text-sm font-semibold text-slate-900 md:text-base">
           {item.productName}
         </span>
-        <span className="text-xs text-slate-500">
+        <span className="text-xs text-slate-500 md:text-sm">
           {item.productVariantName} • Qtd: {item.quantity}
         </span>
       </div>
-      <div className="text-sm font-semibold">{price}</div>
+      <div className="text-sm font-semibold md:text-base">{price}</div>
     </div>
   );
 }
@@ -92,10 +92,11 @@ export default function Orders({ orders }: OrderProps) {
   return (
     <div className="space-y-4">
       <div className="px-1">
-        <h1 className="text-lg font-semibold tracking-tight">Meus pedidos</h1>
+        <h1 className="text-lg font-semibold tracking-tight md:text-2xl">Meus pedidos</h1>
       </div>
 
-      <ScrollArea className="h-[calc(100dvh-220px)] pr-1">
+      {/* Altura fluida: subtraímos um cabeçalho aproximado */}
+      <ScrollArea className="h-[calc(100dvh-220px)] pr-1 md:h-[calc(100dvh-260px)]">
         <div className="space-y-4">
           {orders.map((order, idx) => (
             <Card
@@ -106,7 +107,7 @@ export default function Orders({ orders }: OrderProps) {
                 <Accordion
                   type="single"
                   collapsible
-                  defaultValue={idx === 1 ? `item-${order.id}` : undefined}
+                  defaultValue={idx === 0 ? `item-${order.id}` : undefined}
                   className="w-full"
                 >
                   <AccordionItem
@@ -115,10 +116,11 @@ export default function Orders({ orders }: OrderProps) {
                   >
                     <AccordionTrigger className="px-4 py-5">
                       <div className="grid text-left">
-                        <span className="text-sm font-semibold text-slate-900">
+                        <span className="text-sm font-semibold text-slate-900 md:text-base">
                           Número do Pedido
                         </span>
-                        <span className="text-xs text-slate-500">
+                        <span className="text-xs text-slate-500 md:text-sm">
+
                           {formatOrderNumber(idx)}
                         </span>
                         <div className="mt-1">
@@ -143,30 +145,37 @@ export default function Orders({ orders }: OrderProps) {
                     </AccordionTrigger>
 
                     <AccordionContent className="px-4 pt-1 pb-4">
-                      <div className="space-y-4">
-                        <div className="space-y-4">
-                          {order.items.map((item) => (
+                      {/* Desktop: duas colunas (itens | resumo) */}
+                      <div className="md:grid md:grid-cols-12 md:gap-6">
+                      {/* Itens */}
+                      <div className="space-y-4 md:col-span-8">
+                          {order.items.map((item, i) => (
                             <div key={item.id}>
                               <ItemRow item={item} />
-                              <Separator className="my-4 last:hidden" />
+
+                              {i < order.items.length - 1 && (
+                                <Separator className="my-4" />
+                              )}
                             </div>
                           ))}
                         </div>
 
-                        <div className="space-y-3 rounded-xl border bg-white p-4">
-                          <div className="flex items-center justify-between text-sm">
+                        {/* Resumo */}
+                        <div className="mt-4 space-y-3 rounded-xl border bg-white p-4 md:col-span-4 md:mt-0 md:self-start">
+                          <div className="flex items-center justify-between text-sm md:text-base">
                             <span className="text-slate-600">Subtotal</span>
                             <span className="font-medium">
                               {currency.format(order.totalPriceInCents / 100)}
                             </span>
                           </div>
-                          <div className="flex items-center justify-between text-sm">
+
+                          <div className="flex items-center justify-between text-sm md:text-base">
                             <span className="text-slate-600">
                               Transporte e Manuseio
                             </span>
                             <span className="font-medium">Grátis</span>
                           </div>
-                          <div className="flex items-center justify-between text-sm">
+                          <div className="flex items-center justify-between text-sm md:text-base">
                             <span className="text-slate-600">
                               Taxa Estimada
                             </span>
@@ -174,14 +183,14 @@ export default function Orders({ orders }: OrderProps) {
                           </div>
                           <Separator />
                           <div className="flex items-center justify-between">
-                            <span className="text-sm font-semibold">Total</span>
-                            <span className="text-sm font-extrabold">
+                            <span className="text-sm font-semibold md:text-base">Total</span>
+                            <span className="text-sm font-extrabold md:text-base">
                               {currency.format(order.totalPriceInCents / 100)}
                             </span>
                           </div>
                         </div>
 
-                        <div className="text-[11px] text-slate-500">
+                        <div className="text-[11px] text-slate-500 md:text-xs">
                           Pedido feito em:{" "}
                           {new Date(order.createdAt).toLocaleDateString(
                             "pt-BR",
