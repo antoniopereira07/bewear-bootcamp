@@ -12,10 +12,20 @@ import {
   createShippingAddressSchema,
 } from "./schema";
 
+// Helpers de normalização
+const onlyDigits = (s: string) => s.replace(/\D/g, "");
+
+const maskCEP = (digits: string) => {
+  // espera "00000000" e devolve "00000-000"
+  if (digits.length !== 8) return digits;
+  return `${digits.slice(0, 5)}-${digits.slice(5)}`;
+};
+
 export const createShippingAddress = async (
   data: CreateShippingAddressSchema,
 ) => {
-  createShippingAddressSchema.parse(data);
+// validações de formato/coerência (Zod + cpf-cnpj-validator)
+const parsed = createShippingAddressSchema.parse(data);
 
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -25,22 +35,28 @@ export const createShippingAddress = async (
     throw new Error("Unauthorized");
   }
 
+   // Normalizações para persistência
+   const zipDigits = onlyDigits(parsed.zipCode);
+   const cpfDigits = onlyDigits(parsed.cpf);
+   const phoneFormatted = parsed.phone; // já no formato (11) 99999-9999
+   const zipMasked = maskCEP(zipDigits); // persistimos "00000-000"
+
   const [shippingAddress] = await db
     .insert(shippingAddressTable)
     .values({
       userId: session.user.id,
-      recipientName: data.fullName,
-      street: data.address,
-      number: data.number,
-      complement: data.complement || null,
-      city: data.city,
-      state: data.state,
-      neighborhood: data.neighborhood,
-      zipCode: data.zipCode,
+      recipientName: parsed.fullName.trim(),
+      street: parsed.address,
+      number: parsed.number,
+      complement: parsed.complement || null,
+      city: parsed.city,
+      state: parsed.state.toUpperCase(),
+      neighborhood: parsed.neighborhood,
+      zipCode: zipMasked, // salva com máscara
       country: "Brasil",
-      phone: data.phone,
-      email: data.email,
-      cpfOrCnpj: data.cpf,
+      phone: phoneFormatted, // mantém formatação amigável
+      email: parsed.email,
+      cpfOrCnpj: cpfDigits, // salva CPF só com dígitos
     })
     .returning();
 
