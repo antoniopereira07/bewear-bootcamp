@@ -4,6 +4,7 @@ import Link from "next/link";
 import { productTable, productVariantTable } from "@/db/schema";
 import { formatCentsToBRL } from "@/helpers/money";
 import { cn } from "@/lib/utils";
+
 interface ProductItemProps {
   product: typeof productTable.$inferSelect & {
     variants: (typeof productVariantTable.$inferSelect)[];
@@ -22,13 +23,13 @@ const ProductItem = ({ product, textContainerClassName }: ProductItemProps) => {
         src={firstVariant.imageUrl}
         alt={firstVariant.name}
         sizes="100vw"
-        width={0}
         height={0}
+        width={0}
         className="h-auto w-full rounded-3xl"
       />
       <div
         className={cn(
-          "max-w[200px] flex flex-col gap-1",
+          "flex max-w-[200px] flex-col gap-1",
           textContainerClassName,
         )}
       >

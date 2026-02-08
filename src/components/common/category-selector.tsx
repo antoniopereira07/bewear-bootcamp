@@ -16,7 +16,7 @@ const CategorySelector = ({ categories }: CategorySelectorProps) => {
           <Button
             key={category.id}
             variant="ghost"
-            className="h-12 rounded-full bg-white text-xs font-semibold hover:bg-white" 
+            className="h-12 rounded-full bg-white text-xs font-semibold hover:bg-white"
             asChild
           >
             <Link href={`/category/${category.slug}`}>{category.name}</Link>

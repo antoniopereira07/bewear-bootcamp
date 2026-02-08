@@ -2,12 +2,12 @@
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
-import {useRef} from "react";
+import { useRef } from "react";
 
+import ProductItem from "@/components/common/product-item";
 import { productTable, productVariantTable } from "@/db/schema";
 
 import { Button } from "../ui/button";
-import ProductItem from "./product-item";
 
 interface ProductListProps {
   title: string;
@@ -17,18 +17,18 @@ interface ProductListProps {
   seeAllHref?: string;
 }
 
-const ProductList = ({ 
-  title, 
-  products, 
-  seeAllHref="/products"
+const ProductList = ({
+  title,
+  products,
+  seeAllHref = "/products",
 }: ProductListProps) => {
   const scrollerRef = useRef<HTMLDivElement | null>(null);
 
   const scrollBy = (delta: number) => {
     const el = scrollerRef.current;
     if (!el) return;
-    el.scrollBy({left: delta, behavior: "smooth"})
-  }
+    el.scrollBy({ left: delta, behavior: "smooth" });
+  };
 
   return (
     <section className="space-y-3">
@@ -69,11 +69,12 @@ const ProductList = ({
 
       <div
         ref={scrollerRef}
-        className="flex w-full gap-4 overflow-x-auto px-5 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        className="flex w-full gap-4 overflow-x-auto px-5 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
         {products.map((product) => (
           <ProductItem key={product.id} product={product} />
         ))}
-        </div>
+      </div>
     </section>
   );
 };

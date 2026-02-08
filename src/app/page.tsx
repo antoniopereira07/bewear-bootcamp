@@ -12,44 +12,42 @@ import { productTable } from "@/db/schema";
 
 const Home = async () => {
   const products = await db.query.productTable.findMany({
-    with: {
-      variants: true,
-    },
+    with: { variants: true },
   });
   const newlyCreatedProducts = await db.query.productTable.findMany({
     orderBy: [desc(productTable.createdAt)],
-    with: {
-      variants: true,
-    },
+    with: { variants: true },
   });
   const categories = await db.query.categoryTable.findMany({});
 
   return (
     <>
       <Header />
+
       <main className="mx-auto max-w-6xl space-y-8 px-0 pb-10 md:px-4">
-        <HeroBanner/>
+        <HeroBanner />
 
         <BrandCarousel />
 
-        <ProductList 
-          products={products} 
-          title="Mais vendidos" 
-          seeAllHref="/products?sort=best" 
+        <ProductList
+          products={products}
+          title="Mais vendidos"
+          seeAllHref="/products?sort=best"
         />
 
         <section className="px-5">
           <CategorySelector categories={categories} />
         </section>
-        
-          <ProductList 
-            products={newlyCreatedProducts} 
-            title="Novos produtos"
-            seeAllHref="/products?sort=new"
-          />
+
+        <ProductList
+          products={newlyCreatedProducts}
+          title="Novos produtos"
+          seeAllHref="/products?sort=new"
+        />
 
         <PromoGrid />
       </main>
+
       <Footer />
     </>
   );
