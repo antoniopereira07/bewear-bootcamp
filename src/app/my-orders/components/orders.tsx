@@ -91,10 +91,13 @@ export default function Orders({ orders }: OrderProps) {
   return (
     <div className="space-y-4">
       <div className="px-1">
-        <h1 className="text-lg font-semibold tracking-tight md:text-2xl">Meus pedidos</h1>
+        <h1 className="text-lg font-semibold tracking-tight md:text-2xl">
+          Meus pedidos
+        </h1>
       </div>
 
       {/* Altura fluida: subtraímos um cabeçalho aproximado */}
+
       <div className="space-y-4">
         {orders.map((order, idx) => (
           <Card
